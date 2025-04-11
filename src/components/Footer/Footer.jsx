@@ -56,6 +56,9 @@ const Footer = () => {
     <footer className={classes.footer}>
       <Container className={classes.inner}>
         <div className={classes.logo}>
+          <Text className={classes.logoText}  size="xl" fw={600} mb={"sm"}>
+            Ecommerce
+          </Text>
           <Group
             gap={0}
             className={classes.social}

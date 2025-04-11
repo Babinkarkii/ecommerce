@@ -11,8 +11,15 @@ import {
 } from "@mantine/core";
 import React from "react";
 import { cartData } from "../mock/mock";
+import { useNavigate } from "react-router-dom";
 
 const CartPage = () => {
+  const router=useNavigate();
+
+  const handleNavigate = () => {
+    router("/payment");
+  }
+
   return (
     <Container size="xl" my="80">
       {cartData.map((item) => (
@@ -44,7 +51,7 @@ const CartPage = () => {
                   </Text>
                 </div>
                 <Group position="apart">
-                  <Button variant="outline" color="red" size="md">
+                  <Button variant="outline" color="red" size="md" onClick={handleNavigate}>
                     Buy Now
                   </Button>
                   <Button variant="subtle" color="gray" size="sm">

@@ -7,11 +7,13 @@ import {
   Box,
   Image,
 } from "@mantine/core";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { homeSectionData } from "../mock/mock";
 import CategoriesSection from "../components/CategoriesSection";
 
 const HomePage = () => {
+  const router= useNavigate();
+  
   return (
     <>
       <Container size="lg" my="120">
@@ -23,6 +25,7 @@ const HomePage = () => {
               ta={"center"}
               tt={"uppercase"}
               style={{ cursor: "pointer" }}
+              onClick={()=>router("/mens")}
             >
               Men's
             </Title>
@@ -35,6 +38,7 @@ const HomePage = () => {
               ta={"center"}
               tt={"uppercase"}
               style={{ cursor: "pointer" }}
+              onClick={()=>router("/womens")}
             >
               Women's
             </Title>
@@ -47,6 +51,7 @@ const HomePage = () => {
               align="center"
               tt={"uppercase"}
               style={{ cursor: "pointer" }}
+              onClick={()=>router("/kids")}
             >
               Kid's
             </Title>
