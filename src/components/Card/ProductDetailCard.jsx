@@ -10,30 +10,38 @@ import {
   Title,
 } from "@mantine/core";
 import React, { useState } from "react";
+import { showNotification } from '@mantine/notifications';
 
 const ProductDetailCard = ({ item }) => {
   const [selectedColor, setSelectedColor] = useState(null);
   const [selectedSize, setSelectedSize] = useState(null);
-  const colorOptions = [
-    { value: "red", label: "Red" },
-    { value: "blue", label: "Blue" },
-    { value: "green", label: "Green" },
-    { value: "black", label: "Black" },
-  ];
+  const colorOptions = (item?.colors || '')
+    .split(',')
+    .filter(Boolean)
+    .map(c => ({ value: c.trim(), label: c.trim().charAt(0).toUpperCase() + c.trim().slice(1) }));
 
-  // Size options
-  const sizeOptions = [
-    { value: "3", label: 3 },
-    { value: "4", label: 4 },
-    { value: "5", label: 5 },
-    { value: "6", label: 6 },
-    { value: "7", label: 7 },
-    { value: "8", label: 8 },
-    { value: "9", label: 9 },
-    { value: "10", label: 10 },
-    { value: "11", label: 11 },
-    { value: "12", label: 12 },
-  ];
+  const sizeOptions = (item?.sizes || '')
+    .split(',')
+    .filter(Boolean)
+    .map(s => ({ value: s.trim(), label: s.trim() }));
+
+  const handleAddToCart = () => {
+    if (!item) return;
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    const cartItem = {
+      ...item,
+      selectedColor,
+      selectedSize,
+    };
+    cart.push(cartItem);
+    localStorage.setItem('cart', JSON.stringify(cart));
+    showNotification({
+      title: 'Added to Cart',
+      message: `${item.name} added to cart!`,
+      color: 'green',
+    });
+  };
+
   return (
     <Card shadow="sm" p={"0"} style={{ marginBottom: "20px" }} my={"80"}>
       <Grid gutter={"lg"}>
@@ -84,7 +92,7 @@ const ProductDetailCard = ({ item }) => {
                 style={{ width: "300px" }}
               />
             </Group>
-            <Button variant="filled" color="#2C2C2C" my={"sm"} size="md">
+            <Button variant="filled" color="#2C2C2C" my={"sm"} size="md" onClick={handleAddToCart}>
               Add to Cart
             </Button>
           </Stack>

@@ -1,24 +1,17 @@
 import React, { useState } from "react";
 import {
-  Container,
-  TextInput,
-  Button,
-  PasswordInput,
-  Group,
-  Stack,
-  Text,
-  Card,
+  Container, TextInput, Button, PasswordInput, Group, Stack, Text, Card
 } from "@mantine/core";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-const LoginPage = () => {
+const AdminLoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
   const handleLogin = async () => {
-    setErrorMessage(""); // Clear previous errors
+    setErrorMessage("");
     try {
       const res = await fetch('http://localhost:5000/api/auth/login', {
         method: 'POST',
@@ -26,12 +19,12 @@ const LoginPage = () => {
         body: JSON.stringify({ email, password })
       });
       const data = await res.json();
-      if (res.ok && data.user && data.user.id) {
+      if (res.ok && data.user && data.user.role === "admin") {
         localStorage.setItem('userId', data.user.id);
         localStorage.setItem('userRole', data.user.role);
-        navigate("/profile");
+        navigate("/admin");
       } else {
-        setErrorMessage(data.message || "Invalid credentials");
+        setErrorMessage("You are not an admin or credentials are invalid.");
       }
     } catch (err) {
       setErrorMessage("Login failed");
@@ -41,14 +34,9 @@ const LoginPage = () => {
   return (
     <Container size={"xs"} mt={120} mb={80}>
       <Group justify="center" align="center" grow>
-        <Stack
-          justify="center"
-          align="center"
-          w={"100%"}
-          h={"calc(100vh - 250px)"}
-        >
+        <Stack justify="center" align="center" w={"100%"} h={"calc(100vh - 250px)"}>
           <Text fz={"lg"} fw={600} ta={"center"} mb={32}>
-            Enter Your Email To Sign In
+            Admin Login
           </Text>
           <Card withBorder w={"400px"} shadow="sm" padding="lg" radius="md">
             <Stack gap={"lg"}>
@@ -67,11 +55,8 @@ const LoginPage = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
-              <Link to={"#"} style={{ textDecoration: "none", color: "black" }}>
-                Forget Password?
-              </Link>
               <Button color="dark" onClick={handleLogin}>
-                Login
+                Admin Login
               </Button>
             </Stack>
           </Card>
@@ -81,4 +66,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default AdminLoginPage; 

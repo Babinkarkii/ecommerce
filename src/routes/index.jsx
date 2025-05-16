@@ -8,13 +8,14 @@ import AdminDashboard from "../pages/AdminDashboard";
 import AddProductPage from "../pages/AddProductPage";
 import CartPage from "../pages/CartPage";
 import ProductListPage from "../pages/ProductListPage";
-import UserDashboard from "../pages/UserDashboardPage";
+import ProfilePage from "../pages/UserDashboardPage";
 import SignupPage from "../pages/SignUpPage";
 import SuggestedProductPage from "../pages/SuggestedProductPage";
 import PaymentPage from "../pages/PaymentPage";
 import KidsPage from "../pages/KidsPage";
 import MenPage from "../pages/MenPage";
 import WomenPage from "../pages/WomenPage";
+import AdminLoginPage from "../pages/AdminLoginPage";
 
 const AppRoutes = () => {
   return (
@@ -25,7 +26,7 @@ const AppRoutes = () => {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignupPage />} />
       <Route path="/admin" element={<AdminDashboard />} />
-      <Route path="/user" element={<UserDashboard />} />
+      <Route path="/profile" element={<ProfilePage />} />
       <Route path="/suggested-products" element={<SuggestedProductPage />} />
       <Route path="/admin/add-product" element={<AddProductPage />} />
       <Route path="/cart" element={<CartPage />} />
@@ -34,6 +35,8 @@ const AppRoutes = () => {
       <Route path= "/kids" element={<KidsPage />} />
       <Route path= "/mens" element={<MenPage />} />
       <Route path="/womens" element={<WomenPage/>} />
+      <Route path="/admin-login" element={<AdminLoginPage />} />
+      <Route path="/product/:id" element={<ProductPage />} />
     </Routes>
   );
 };

@@ -1,6 +1,5 @@
-import { Box, Button, Container, Grid, Group, Input } from "@mantine/core";
-import React, { useState } from "react";
-import { products } from "../mock/mock";
+import { Box, Button, Container, Grid, Group, Input, Title, Loader, Center } from "@mantine/core";
+import React, { useState, useEffect } from "react";
 import FilterSidebar from "../components/FilterSidebar";
 import ProductGrid from "../components/ProductGrid";
 
@@ -11,6 +10,22 @@ const ProductListPage = () => {
     color: [],
     size: [],
   });
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    fetch("/api/products")
+      .then(res => res.json())
+      .then(data => {
+        setProducts(data);
+        setLoading(false);
+      })
+      .catch(() => {
+        setError("Failed to load products");
+        setLoading(false);
+      });
+  }, []);
 
   const filtered = products.filter((p) => {
     return (
@@ -19,9 +34,17 @@ const ProductListPage = () => {
       p.price <= filters.price &&
       (filters.color.length === 0 || filters.color.includes(p.color)) &&
       (filters.size.length === 0 ||
-        filters.size.some((size) => p.size.includes(parseFloat(size))))
+        filters.size.some((size) => p.size && p.size.includes(parseFloat(size)))
+      )
     );
   });
+
+  const menProducts = filtered.filter(p => p.category === 'men');
+  const womenProducts = filtered.filter(p => p.category === 'women');
+  const kidsProducts = filtered.filter(p => p.category === 'kids');
+
+  if (loading) return <Center mt={120}><Loader size="lg" /></Center>;
+  if (error) return <Center mt={120}><Title color="red">{error}</Title></Center>;
 
   return (
     <Container size="xl" mt={120} mb={80}>
@@ -39,7 +62,12 @@ const ProductListPage = () => {
             <Button variant="outline">Price ↓</Button>
             <Button variant="outline">Rating</Button>
           </Group>
-          <ProductGrid products={filtered} />
+          <Title order={2} mt={32} mb={8}>Men's Shoes</Title>
+          <ProductGrid products={menProducts} />
+          <Title order={2} mt={32} mb={8}>Women's Shoes</Title>
+          <ProductGrid products={womenProducts} />
+          <Title order={2} mt={32} mb={8}>Kids' Shoes</Title>
+          <ProductGrid products={kidsProducts} />
         </Grid.Col>
       </Grid>
     </Container>

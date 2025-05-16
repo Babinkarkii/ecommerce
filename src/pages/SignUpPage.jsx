@@ -19,7 +19,7 @@ const SignupPage = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
-  const handleSignup = () => {
+  const handleSignup = async () => {
     // Basic validation
     if (!username || !email || !password || !confirmPassword) {
       setErrorMessage("All fields are required.");
@@ -30,12 +30,21 @@ const SignupPage = () => {
       return;
     }
 
-    // Save user data in localStorage (for demo purposes)
-    const userData = { username, email, password };
-    localStorage.setItem("user", JSON.stringify(userData));
-
-    // Redirect to the user page after signup
-    navigate("/user");
+    try {
+      const res = await fetch('http://localhost:5000/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, email, password })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        navigate("/login");
+      } else {
+        setErrorMessage(data.message || "Signup failed");
+      }
+    } catch (err) {
+      setErrorMessage("Signup failed");
+    }
   };
 
   return (

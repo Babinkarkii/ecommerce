@@ -13,9 +13,10 @@ import { IconSearch } from "@tabler/icons-react";
 
 const AppHeader = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const isAdmin = localStorage.getItem('userRole') === 'admin';
   useEffect(() => {
-    const token = localStorage.getItem("user");
-    if (token) {
+    const userId = localStorage.getItem("userId");
+    if (userId) {
       setIsLoggedIn(true);
     }
   }, []);
@@ -71,20 +72,13 @@ const AppHeader = () => {
             <Group gap={30}>
               {isLoggedIn ? (
                 <>
-                  <Link
-                    to="/user"
-                    style={{ textDecoration: "none", color: "black" }}
-                  >
-                    <Button variant="outline" color="dark" size="md">
-                      Profile
-                    </Button>
-                  </Link>
+                  <Button component={Link} to="/profile" variant="default">Profile</Button>
                   <Button
                     variant="outline"
                     color="dark"
                     size="md"
                     onClick={() => {
-                      localStorage.removeItem("user");
+                      localStorage.clear();
                       window.location.reload();
                     }}
                   >
@@ -97,7 +91,7 @@ const AppHeader = () => {
                     to="/login"
                     style={{ textDecoration: "none", color: "black" }}
                   >
-                    <Button variant="outline" color="dark" size="md">
+                    <Button variant="filled" color="blue" size="md" mr={8}>
                       Login
                     </Button>
                   </Link>
@@ -110,6 +104,26 @@ const AppHeader = () => {
                     </Button>
                   </Link>
                 </>
+              )}
+              {!isAdmin && (
+                <Link
+                  to="/admin-login"
+                  style={{ textDecoration: "none", color: "black" }}
+                >
+                  <Button variant="outline" color="red" size="md">
+                    Admin Login
+                  </Button>
+                </Link>
+              )}
+              {isAdmin && (
+                <Link
+                  to="/admin"
+                  style={{ textDecoration: "none", color: "black" }}
+                >
+                  <Button variant="outline" color="red" size="md">
+                    Admin Dashboard
+                  </Button>
+                </Link>
               )}
             </Group>
           </Group>

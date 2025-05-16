@@ -13,7 +13,7 @@ const ProductCard = ({ item }) => {
       p={0}
       radius={"lg"}
       style={{ cursor: "pointer" }}
-      onClick={() => navigate("/product")}
+      onClick={() => navigate(`/product/${item.id}`)}
     >
       <Image
         src={item.image}
